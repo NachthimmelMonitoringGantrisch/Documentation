@@ -8,7 +8,7 @@
 
 Das dargestellte Architekturdiagramm in Abbildung 1 visualisiert den Aufbau einer containerisierten Webanwendung zur Analyse von Lichtverschmutzungsdaten, die durch das TESS Photometer Network bereitgestellt werden. Die Anwendung besteht aus mehreren Komponenten, die in Docker-Containern isoliert laufen und über eine SQLite-Datenbank miteinander kommunizieren.
 
-![Architekturentwurf lokales Programm Nachthimmelmonitoring](../public/concept/Server_Architecture_Gantrisch.png)
+![Architekturentwurf lokales Programm Nachthimmelmonitoring](/concept/Server_Architecture_Gantrisch.png)
 
 # Architecture Decision Records
 
@@ -16,15 +16,15 @@ Das dargestellte Architekturdiagramm in Abbildung 1 visualisiert den Aufbau eine
 
 Anforderungen an die Datenschnittstelle: Es wird eine zuverlässige Lösung für den Bezug der Photometer Daten gesucht. Für die Darstellung der Daten werden mehrere Grafiken erstellt. Diese Grafiken erfordern eine enorme Datengrundlage und stellen somit auch hohe Anforderungen an die Ressourcen der Datenschnittstelle.
 
-| Kriterium                   | Nextcloud / TESS-IDA-Tools       | Rest-API                     |
-|-----------------------------|----------------------------------|------------------------------|
-| Leistung                    | Höhere Ressourcen                | Begrenzte Ressourcen         |
-| Anzahl Abfragen erlaubt      | Ab Datenbank unbegrenzt          | Begrenzt möglich             |
-| Anzahl Abfragen nötig       | Sehr viele, besonders bei Vergleich von Sensoren über grossen Zeitraum |                               |
-| Datenbezug                 | Einmal pro Projektinitialisierung und tägliches Update | Pro Sensor und pro Darstellung |
-| Aufwand Integration          | Komplexere Einbindung (SQLite-Datenbank) | Simpel, jedoch viele Abfragen |
-| Verlässlichkeit              | Abhängig von Clouddienst für Initialisierung und Bezug von aktuellen Daten | Abhängig vom Webdienst       |
-| Skalierbarkeit              | Benötigte Ressourcen steigen pro User, Anzahl Darstellungen haben keinen Einfluss auf die Ressourcen | Benötigte Ressourcen steigen pro User und pro Darstellung |
+| Kriterium               | Nextcloud / TESS-IDA-Tools                                                                           | Rest-API                                                  |
+|:------------------------|:-----------------------------------------------------------------------------------------------------|:----------------------------------------------------------|
+| Leistung                | Höhere Ressourcen                                                                                    | Begrenzte Ressourcen                                      |
+| Anzahl Abfragen erlaubt | Ab Datenbank unbegrenzt                                                                              | Begrenzt möglich                                          |
+| Anzahl Abfragen nötig   | Sehr viele, besonders bei Vergleich von Sensoren über grossen Zeitraum                               |                                                           |
+| Datenbezug              | Einmal pro Projektinitialisierung und tägliches Update                                               | Pro Sensor und pro Darstellung                            |
+| Aufwand Integration     | Komplexere Einbindung (SQLite-Datenbank)                                                             | Simpel, jedoch viele Abfragen                             |
+| Verlässlichkeit         | Abhängig von Clouddienst für Initialisierung und Bezug von aktuellen Daten                           | Abhängig vom Webdienst                                    |
+| Skalierbarkeit          | Benötigte Ressourcen steigen pro User, Anzahl Darstellungen haben keinen Einfluss auf die Ressourcen | Benötigte Ressourcen steigen pro User und pro Darstellung |
 
 **Fazit:** Der Datenbezug soll mit der Datenschnittstelle Nextcloud / TESS-IDA-Tools erfolgen. Ausschlaggebend ist, dass zu viele Abfragen mit der REST-API nötig wären, um die gewünschten Darstellungen aufzubereiten. Jedoch wurde darauf hingewiesen, die REST-API nicht maximal zu belasten, da die Ressourcen der Server von STARS4ALL begrenzt sind.
 
@@ -38,16 +38,16 @@ Da zum jetzigen Zeitpunkt nicht klar ist, welche Komponenten Grafana individuali
 
 Die Einbindung der Daten muss mit einer der genannten Datenschnittstellen möglich sein. Die Darstellung der Photometer Daten soll intuitiv und simpel gestaltet werden, sodass die möglichen Interaktionen klar verständlich sind. Für die Umsetzung soll ein Tool gewählt werden, welches die Umsetzung der Ziele mit einem sinnvollen Aufwand ermöglicht.
 
-| Kriterium                   | Grafana Dashboard                | R + Shiny                     | Python + JS + React         |
-|-----------------------------|----------------------------------|------------------------------|------------------------------|
-| Vorwissen                   | Keine                            | Keine, Grundlagen von R vorhanden | Vorwissen von 2 Semestern  |
-| Aufwand                     | Gering, besonders für IoT-Schnittstellen wie MQTT -> Echtzeit | Hoher Aufwand, hohe Komplexität bei vielen Funktionen | Geringer Grundaufwand, hoher Aufwand für Detaillierung |
-| Individualisierbarkeit       | Eingeschränkt                    | Für Analysen sehr hoch, für User Interface normal | Sehr hoch                    |
-| Flexibilität                | Unter Umständen eingeschränkt     | Hoch                         | Keine Grenzen                |
-| Interaktivität              | Gut für Standard-Dashboards      | Hoch, frei programmierbar    | Hoch, frei programmierbar     |
-| Ökosystem                   | Integriertes All-in-One-Tool, kostenpflichtig? | Offenes System, R-Pakete    | Offenes System, Frameworks und Libraries |
-| Skalierbarkeit              | unbekannt                        | Code von Beginn besser strukturieren -> mehr Aufwand | Code von Beginn besser strukturieren -> mehr Aufwand |
-| Reproduzierbarkeit          | Einfach                          | Mehr Aufwand, gute Dokumentation | Mehr Aufwand, gute Dokumentation |
+| Kriterium              | Grafana Dashboard                                             | R + Shiny                                             | Python + JS + React                                    |
+|:-----------------------|:--------------------------------------------------------------|:------------------------------------------------------|:-------------------------------------------------------|
+| Vorwissen              | Keine                                                         | Keine, Grundlagen von R vorhanden                     | Vorwissen von 2 Semestern                              |
+| Aufwand                | Gering, besonders für IoT-Schnittstellen wie MQTT -> Echtzeit | Hoher Aufwand, hohe Komplexität bei vielen Funktionen | Geringer Grundaufwand, hoher Aufwand für Detaillierung |
+| Individualisierbarkeit | Eingeschränkt                                                 | Für Analysen sehr hoch, für User Interface normal     | Sehr hoch                                              |
+| Flexibilität           | Unter Umständen eingeschränkt                                 | Hoch                                                  | Keine Grenzen                                          |
+| Interaktivität         | Gut für Standard-Dashboards                                   | Hoch, frei programmierbar                             | Hoch, frei programmierbar                              |
+| Ökosystem              | Integriertes All-in-One-Tool, kostenpflichtig?                | Offenes System, R-Pakete                              | Offenes System, Frameworks und Libraries               |
+| Skalierbarkeit         | unbekannt                                                     | Code von Beginn besser strukturieren -> mehr Aufwand  | Code von Beginn besser strukturieren -> mehr Aufwand   |
+| Reproduzierbarkeit     | Einfach                                                       | Mehr Aufwand, gute Dokumentation                      | Mehr Aufwand, gute Dokumentation                       |
 
 **Fazit:** Die geforderte Datenaktualität beschränkt sich auf die Daten des letzten Monats. Aufgrund dieser Forderung ist es nicht nötig, die MQTT-Schnittstelle, welche tagesaktuelle Daten liefert, zu verwenden. Deshalb rückt die Erstellung eines Grafana-Dashboards in den Hintergrund. Auch bezüglich der Skalierbarkeit beziehen sich die Erwartungen auf ein lokales Computerprogramm, welches lokal gestartet werden kann und nicht von einer großen Menge an Benutzern angesteuert wird.
 
